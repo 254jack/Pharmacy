@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add Medicine</title>
+  </head>
+  <body>
+    {% extends 'base.html' %} {% block content%}
+    <h1>Add Medicine</h1>
+    <form method="post">
+      {% csrf_token %}
+      <label for="name">Name:</label>
+      <input required type="text" id="name" name="name" /><br />
+      <label for="batch_no">Batch Number:</label>
+      <input type="text" id="batch_no" name="batch_no" /><br />
+      <label for="expiry_date">Expiry Date:</label>
+      <input type="date" id="expiry_date" name="expiry_date" /><br />
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" /><br />
+      <button type="submit">Add Medicine</button>
+    </form>
+    <a href="{% url 'index' %}">Back to Medicine List</a>
+    {%endblock content%}
+  </body>
+</html>

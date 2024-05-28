@@ -1,0 +1,36 @@
+<!-- chemistApi/templates/dashboard.html -->
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Admin Dashboard</h1>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Medicines</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ num_medicines }}</h5>
+                    <p class="card-text">Total Medicines</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Prescriptions</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ num_prescriptions }}</h5>
+                    <p class="card-text">Total Prescriptions</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Orders</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ num_orders }}</h5>
+                    <p class="card-text">Total Orders</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
