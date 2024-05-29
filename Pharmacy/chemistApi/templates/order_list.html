@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Orders{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>All Orders</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Medicine</th>
+                <th>Quantity</th>
+                <th>Order Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.customer.name }}</td>
+                <td>{{ order.medicine.name }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>{{ order.order_date }}</td>
+                <td>
+                    <a href="{% url 'update_order' order.pk %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'delete_order' order.pk %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button class="btn btn-primary">
+        <a href="{% url 'create_order' %}" class="nav-link text-white">Add Order</a>
+    </button>
+</div>
+{% endblock %}

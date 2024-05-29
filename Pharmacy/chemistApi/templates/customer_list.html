@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Customers{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>All Customers</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.contact }}</td>
+                <td>
+                    <a href="{% url 'update_customer' customer.pk %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'delete_customer' customer.pk %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button class="btn btn-primary">
+        <a href="{% url 'create_customer' %}" class="nav-link text-white">Add Customer</a>
+    </button>
+</div>
+{% endblock %}

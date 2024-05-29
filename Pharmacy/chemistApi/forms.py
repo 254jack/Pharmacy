@@ -16,4 +16,19 @@ class MedicineForm(forms.ModelForm):
 class BatchForm(forms.ModelForm):
     class Meta:
         model = Batch
-        fields = ['medicine','batch_no', 'expiry_date', 'quantity']
+        fields = ['medicine','batch_no', 'expiry_date', 'quantity','supplier']
+
+
+
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ['name', 'contact']
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
+        exclude = ['order_date']
+
+

@@ -34,4 +34,13 @@ urlpatterns = [
          views.BatchUpdateView.as_view(), name='batch_update'),
     path('batches/delete/<int:pk>/',
          views.BatchDeleteView.as_view(), name='batch_delete'),
+
+    path('customers/', views.CustomerListView.as_view(), name='customer_list'),
+    path('customers/create/', views.CustomerCreateView.as_view(), name='create_customer'),
+    path('customers/update/<int:pk>/', views.CustomerUpdateView.as_view(), name='update_customer'),
+    path('customers/delete/<int:pk>/', views.CustomerDeleteView.as_view(), name='delete_customer'),
+    path('orders/', views.OrderListView.as_view(), name='order_list'),
+    path('orders/create/', views.OrderCreateView.as_view(), name='create_order'),
+    path('orders/update/<int:pk>/', views.OrderUpdateView.as_view(), name='update_order'),
+    path('orders/delete/<int:pk>/', views.OrderDeleteView.as_view(), name='delete_order'),
 ]

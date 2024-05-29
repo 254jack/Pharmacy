@@ -16,7 +16,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
-                
+
                 <li class="nav-item">
                     <a class="nav-link" href=" {%url 'medicine_list'%}">Medicines</a>
                 </li>
@@ -24,7 +24,7 @@
                     <a class="nav-link" href=" {%url 'batch_list'%}">Batches</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">Orders</a>
+                    <a class="nav-link" href="{% url 'order_list'%}">Orders</a>
                    
                 </li>
                 <li class="nav-item">
@@ -32,7 +32,11 @@
                    
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">Customers</a>
+                    <a class="nav-link" href="{% url 'supplier_list'%}">Suppliers</a>
+                   
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{%url 'customer_list'%}">Customers</a>
                    
                 </li>
                     <li class="nav-item dropdown">

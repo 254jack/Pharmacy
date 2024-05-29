@@ -133,22 +133,55 @@ class BatchDeleteView(DeleteView):
     success_url = reverse_lazy('batch_list')
 
 
-def create_customer(request):
-    if request.method == 'POST':
-        form = CustomerForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('customer_list')
-    else:
-        form = CustomerForm()
-    return render(request, 'create_customer.html', {'form': form})
+@method_decorator(login_required, name='dispatch')
+class CustomerListView(ListView):
+    model = Customer
+    template_name = 'customer_list.html'
+    context_object_name = 'customers'
 
-def create_order(request):
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('order_list')
-    else:
-        form = OrderForm()
-    return render(request, 'create_order.html', {'form': form})
+@method_decorator(login_required, name='dispatch')
+class CustomerCreateView(CreateView):
+    model = Customer
+    form_class = CustomerForm
+    template_name = 'create_customer.html'
+    success_url = reverse_lazy('customer_list')
+
+@method_decorator(login_required, name='dispatch')
+class CustomerUpdateView(UpdateView):
+    model = Customer
+    form_class = CustomerForm
+    template_name = 'update_customer.html'
+    success_url = reverse_lazy('customer_list')
+
+@method_decorator(login_required, name='dispatch')
+class CustomerDeleteView(DeleteView):
+    model = Customer
+    template_name = 'delete_customer.html'
+    success_url = reverse_lazy('customer_list')
+
+@method_decorator(login_required, name='dispatch')
+class OrderListView(ListView):
+    model = Order
+    template_name = 'order_list.html'
+    context_object_name = 'orders'
+
+@method_decorator(login_required, name='dispatch')
+class OrderCreateView(CreateView):
+    model = Order
+    form_class = OrderForm
+    template_name = 'create_order.html'
+    success_url = reverse_lazy('order_list')
+
+@method_decorator(login_required, name='dispatch')
+class OrderUpdateView(UpdateView):
+    model = Order
+    form_class = OrderForm
+    template_name = 'update_order.html'
+    success_url = reverse_lazy('order_list')
+
+@method_decorator(login_required, name='dispatch')
+class OrderDeleteView(DeleteView):
+    model = Order
+    template_name = 'delete_order.html'
+    success_url = reverse_lazy('order_list')
+

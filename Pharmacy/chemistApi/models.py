@@ -47,33 +47,13 @@ class Prescription(models.Model):
         return f"{self.customer_name} - {self.medicine.name}"
 
 
-class Sale(models.Model):
-    medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    sale_date = models.DateTimeField(auto_now_add=True)
-    customer_name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f"Sale of {self.medicine.name}"
-
-
-class Order(models.Model):
-    medicine = models.ForeignKey(
-    Medicine, related_name='orders', on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    order_date = models.DateField()
-
-
-    def __str__(self):
-        return f"Order of {self.quantity} {self.medicine.name} on {self.order_date}"
-
-
 class Batch(models.Model):
     medicine = models.ForeignKey(
         Medicine, on_delete=models.CASCADE, related_name='batches')
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     batch_no = models.CharField(max_length=100)
     expiry_date = models.DateField()
-    quantity = models.PositiveIntegerField(null=True)
+    quantity = models.PositiveIntegerField()
 
     def __str__(self):
         return f"{self.medicine.name} - {self.batch_no}"
@@ -81,15 +61,26 @@ class Batch(models.Model):
 
 class Customer(models.Model):
     name = models.CharField(max_length=255)
-    contact = models.CharField(max_length=20)
+    contact = models.CharField(max_length=20, unique=True)
     
     def __str__(self):
         return self.name
-class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    item_name = models.CharField(max_length=255)
-    quantity = models.PositiveIntegerField()
-    order_date = models.DateTimeField(auto_now_add=True)
+
+class Sale(models.Model):
+    medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    sale_date = models.DateTimeField(auto_now_add=True)
+    customer_name = models.CharField(max_length=100)
+    prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Order for {self.quantity} {self.item_name} by {self.customer.name}"
+        return f"Sale of {self.medicine.name}"
+
+class Order(models.Model):
+    customer = models.ForeignKey(Customer, related_name='orders', on_delete=models.CASCADE)
+    medicine = models.ForeignKey(Medicine, related_name='orders', on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    order_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order of {self.quantity} {self.medicine.name} on {self.order_date}"
