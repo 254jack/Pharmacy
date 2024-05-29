@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import *
 from django.contrib.auth.decorators import login_required
-from django.views.generic import View, TemplateView
+from django.views.generic import View, TemplateView,ListView,UpdateView,DeleteView
 from django.views.generic import CreateView
-from .forms import *
+from .forms import Medicine, MedicineForm,UserCreationForm,UserRegisterForm
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.contrib.auth import logout as auth_logout
+from django.utils.decorators import method_decorator
 from django.contrib import messages
 
 
@@ -15,18 +16,38 @@ def index(request):
     medicines = Medicine.objects.all()
     return render(request, 'index.html', {'medicines': medicines})
 
+@method_decorator(login_required, name='dispatch')
+class MedicineListView(ListView):
+    model = Medicine
+    template_name = 'medicine_list.html'
+    context_object_name = 'medicines'
+@method_decorator(login_required, name='dispatch')
+class MedicineUpdateView(UpdateView):
+    model = Medicine
+    form_class = MedicineForm
+    template_name = 'medicine_form.html'
+    success_url = reverse_lazy('medicine_list')
 
+@method_decorator(login_required, name='dispatch')
+class MedicineDeleteView(DeleteView):
+    model = Medicine
+    template_name = 'medicine_confirm_delete.html'
+    success_url = reverse_lazy('medicine_list')
 @login_required
 def add_medicine(request):
     if request.method == 'POST':
-        name = request.POST['name']
-        batch_no = request.POST['batch_no']
-        expiry_date = request.POST['expiry_date']
-        quantity = request.POST['quantity']
-        Medicine.objects.create(
-            name=name, batch_no=batch_no, expiry_date=expiry_date, quantity=quantity)
-        return redirect('index')
-    return render(request, 'add_medicine.html')
+        form = MedicineForm(request.POST)
+        if form.is_valid():
+            medicine_name = form.cleaned_data['name']
+            if Medicine.objects.filter(name=medicine_name).exists():
+                messages.error(request, f'Medicine with the name "{medicine_name}" already exists.')
+            else:
+                form.save()
+                messages.success(request, 'Medicine added successfully.')
+                return redirect('medicine_list')
+    else:
+        form = MedicineForm()
+    return render(request, 'add_medicine.html', {'form': form})
 
 
 class SignUpView(CreateView):
@@ -42,7 +63,6 @@ class CustomLoginView(LoginView):
 def logout(request):
     if request.method in ['POST', 'GET']:
         auth_logout(request)
-        messages.info(request, 'You have successfully logged out.')
         return redirect('logged_out')
     return redirect('index')
 
@@ -58,3 +78,6 @@ def dashboard(request):
     }
     return render(request, 'dashboard.html', context)
 
+@login_required
+def profile(request):
+    return render(request, 'profile.html', {'user': request.user})
