@@ -1,14 +1,16 @@
+from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
 from .models import *
 from django.contrib.auth.decorators import login_required
-from django.views.generic import View, TemplateView,ListView,UpdateView,DeleteView
+from django.views.generic import View, TemplateView, ListView, UpdateView, DeleteView
 from django.views.generic import CreateView
-from .forms import Medicine, MedicineForm,UserCreationForm,UserRegisterForm
+from .forms import Medicine, MedicineForm, UserCreationForm, UserRegisterForm
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.contrib.auth import logout as auth_logout
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from .forms import *
 
 
 @login_required
@@ -16,11 +18,22 @@ def index(request):
     medicines = Medicine.objects.all()
     return render(request, 'index.html', {'medicines': medicines})
 
+
 @method_decorator(login_required, name='dispatch')
 class MedicineListView(ListView):
     model = Medicine
     template_name = 'medicine_list.html'
     context_object_name = 'medicines'
+
+    def get_queryset(self):
+        return Medicine.objects.all().prefetch_related('batches')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['additional_info'] = 'Additional information here'
+        return context
+
+
 @method_decorator(login_required, name='dispatch')
 class MedicineUpdateView(UpdateView):
     model = Medicine
@@ -28,11 +41,14 @@ class MedicineUpdateView(UpdateView):
     template_name = 'medicine_form.html'
     success_url = reverse_lazy('medicine_list')
 
+
 @method_decorator(login_required, name='dispatch')
 class MedicineDeleteView(DeleteView):
     model = Medicine
     template_name = 'medicine_confirm_delete.html'
     success_url = reverse_lazy('medicine_list')
+
+
 @login_required
 def add_medicine(request):
     if request.method == 'POST':
@@ -40,7 +56,8 @@ def add_medicine(request):
         if form.is_valid():
             medicine_name = form.cleaned_data['name']
             if Medicine.objects.filter(name=medicine_name).exists():
-                messages.error(request, f'Medicine with the name "{medicine_name}" already exists.')
+                messages.error(
+                    request, f'Medicine with the name "{medicine_name}" already exists.')
             else:
                 form.save()
                 messages.success(request, 'Medicine added successfully.')
@@ -66,6 +83,7 @@ def logout(request):
         return redirect('logged_out')
     return redirect('index')
 
+
 @login_required
 def dashboard(request):
     num_medicines = Medicine.objects.count()
@@ -78,6 +96,59 @@ def dashboard(request):
     }
     return render(request, 'dashboard.html', context)
 
+
 @login_required
 def profile(request):
     return render(request, 'profile.html', {'user': request.user})
+
+
+@login_required
+def add_batch(request):
+    if request.method == 'POST':
+        form = BatchForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('batch_list')
+    else:
+        form = BatchForm()
+    return render(request, 'add_batch.html', {'form': form})
+
+
+class BatchListView(ListView):
+    model = Batch
+    template_name = 'batch_list.html'
+    context_object_name = 'batches'
+
+
+class BatchUpdateView(UpdateView):
+    model = Batch
+    form_class = BatchForm
+    template_name = 'update_batch.html'
+    success_url = reverse_lazy('batch_list')
+
+
+class BatchDeleteView(DeleteView):
+    model = Batch
+    template_name = 'delete_batch.html'
+    success_url = reverse_lazy('batch_list')
+
+
+def create_customer(request):
+    if request.method == 'POST':
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('customer_list')
+    else:
+        form = CustomerForm()
+    return render(request, 'create_customer.html', {'form': form})
+
+def create_order(request):
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('order_list')
+    else:
+        form = OrderForm()
+    return render(request, 'create_order.html', {'form': form})

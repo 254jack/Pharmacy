@@ -23,11 +23,8 @@ class User(AbstractUser):
 
 
 class Medicine(models.Model):
-    name = models.CharField(max_length=100)
-    batch_no = models.CharField(max_length=100)
-    expiry_date = models.DateField()
-    quantity = models.IntegerField()
-
+    name = models.CharField(max_length=255)
+    description = models.TextField(default='No description provided')
     def __str__(self):
         return self.name
 
@@ -59,8 +56,40 @@ class Sale(models.Model):
     def __str__(self):
         return f"Sale of {self.medicine.name}"
 
+
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    medicine = models.ManyToManyField(Medicine)
-    order_date = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=50, default='Pending')
+    medicine = models.ForeignKey(
+    Medicine, related_name='orders', on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    order_date = models.DateField()
+
+
+    def __str__(self):
+        return f"Order of {self.quantity} {self.medicine.name} on {self.order_date}"
+
+
+class Batch(models.Model):
+    medicine = models.ForeignKey(
+        Medicine, on_delete=models.CASCADE, related_name='batches')
+    batch_no = models.CharField(max_length=100)
+    expiry_date = models.DateField()
+    quantity = models.PositiveIntegerField(null=True)
+
+    def __str__(self):
+        return f"{self.medicine.name} - {self.batch_no}"
+
+
+class Customer(models.Model):
+    name = models.CharField(max_length=255)
+    contact = models.CharField(max_length=20)
+    
+    def __str__(self):
+        return self.name
+class Order(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    item_name = models.CharField(max_length=255)
+    quantity = models.PositiveIntegerField()
+    order_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order for {self.quantity} {self.item_name} by {self.customer.name}"

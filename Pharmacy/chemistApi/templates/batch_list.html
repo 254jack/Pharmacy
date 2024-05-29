@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Batches</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Medicine</th>
+                <th>Batch No</th>
+                <th>Expiry Date</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for batch in batches %}
+            <tr>
+                <td>{{ batch.medicine.name }}</td>
+                <td>{{ batch.batch_no }}</td>
+                <td>{{ batch.expiry_date }}</td>
+                <td>{{ batch.quantity }}</td>
+                <td>
+                    <a href="{% url 'batch_update' batch.pk %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'batch_delete' batch.pk %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+	<button>
+		<a href="{% url 'add_batch'%}">Add A Batch</a>
+	</button>
+</div>
+{% endblock %}

@@ -1,38 +1,48 @@
-{% extends 'base.html' %}
-
+{% extends 'base.html' %} 
 {% block content %}
 <div class="container">
-    <h2>All Medicines</h2>
-	
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Batch No</th>
-                <th>Expiry Date</th>
-                <th>Quantity</th>
-                <th>Actions</th>
-
-            </tr>
-
-        </thead>
-        <tbody>
-            {% for medicine in medicines %}
-            <tr>
-                <td>{{ medicine.name }}</td>
-                <td>{{ medicine.batch_no }}</td>
-                <td>{{ medicine.expiry_date }}</td>
-                <td>{{ medicine.quantity }}</td>
-                <td>
-                    <a href="{% url 'medicine_update' medicine.pk %}" class="btn btn-warning">Edit</a>
-                    <a href="{% url 'medicine_delete' medicine.pk %}" class="btn btn-danger">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-	<button>
-	<a class="nav-link " href="{% url 'add_medicine' %}">Add Medicine</a>
-	</button>
+  <h2>All Medicines</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Batch No</th>
+        <th>Expiry Date</th>
+        <th>Quantity</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for medicine in medicines %}
+      <tr>
+        <td>{{ medicine.name }}</td>
+		<td>{{medicine.description}}</td>
+        <td>
+          {% for batch in medicine.batches.all %}
+            {{ batch.batch_no }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </td>
+        <td>
+          {% for batch in medicine.batches.all %}
+            {{ batch.expiry_date }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </td>
+        <td>
+          {% for batch in medicine.batches.all %}
+            {{ batch.quantity }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </td>
+        <td>
+          <a href="{% url 'medicine_update' medicine.pk %}" class="btn btn-warning">Edit</a>
+          <a href="{% url 'medicine_delete' medicine.pk %}" class="btn btn-danger">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button>
+    <a class="nav-link" href="{% url 'add_medicine' %}">Add Medicine</a>
+  </button>
 </div>
 {% endblock %}
