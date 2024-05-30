@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Prescription{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Verify Prescription</h2>
+    <p>Are you sure you want to verify the prescription for "{{ prescription.customer_name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Verify</button>
+        <a href="{% url 'list_prescriptions' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

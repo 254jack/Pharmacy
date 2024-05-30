@@ -1,7 +1,7 @@
 from django.db.models.query import QuerySet
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import View, TemplateView, ListView, UpdateView, DeleteView
 from django.views.generic import CreateView
 from .forms import Medicine, MedicineForm, UserCreationForm, UserRegisterForm
@@ -218,3 +218,73 @@ def delete_supplier(request, pk):
     return render(request, 'delete_supplier.html', {'supplier': supplier})
 
 
+
+# Prescriptions views
+@login_required
+def create_prescription(request):
+    if request.method == 'POST':
+        form = PrescriptionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('list_prescriptions')
+    else:
+        form = PrescriptionForm()
+    return render(request, 'create_prescription.html', {'form': form})
+@login_required
+@permission_required('chemistApi.change_prescription', raise_exception=True)
+def verify_prescription(request, pk):
+    prescription = get_object_or_404(Prescription, pk=pk)
+    if request.method == 'POST':
+        prescription.verified = True
+        prescription.save()
+        return redirect('list_prescriptions')
+    return render(request, 'verify_prescription.html', {'prescription': prescription})
+
+def create_e_prescription(request):
+    if request.method == 'POST':
+        form = EPrescriptionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('list_e_prescriptions')
+    else:
+        form = EPrescriptionForm()
+    return render(request, 'create_e_prescription.html', {'form': form})
+
+def list_prescriptions(request):
+    prescriptions = Prescription.objects.all()
+    return render(request, 'list_prescriptions.html', {'prescriptions': prescriptions})
+
+def list_e_prescriptions(request):
+    e_prescriptions = EPrescription.objects.all()
+    return render(request, 'list_e_prescriptions.html', {'e_prescriptions': e_prescriptions})
+
+@login_required
+def delete_prescription(request, pk):
+    prescription = get_object_or_404(Prescription, pk=pk)
+    if request.method == 'POST':
+        prescription.delete()
+        return redirect('list_prescriptions')
+    return render(request, 'delete_prescription.html', {'prescription': prescription})
+
+@login_required
+def delete_e_prescription(request, pk):
+    e_prescription = get_object_or_404(EPrescription, pk=pk)
+    if request.method == 'POST':
+        e_prescription.delete()
+        return redirect('list_e_prescriptions')
+    return render(request, 'delete_e_prescription.html', {'e_prescription': e_prescription})
+
+
+def sale_list(request):
+    sales = Sale.objects.all()
+    return render(request, 'sale_list.html', {'sales': sales})
+
+def sale_create(request):
+    if request.method == 'POST':
+        form = SaleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('sale_list')
+    else:
+        form = SaleForm()
+    return render(request, 'sale_form.html', {'form': form})

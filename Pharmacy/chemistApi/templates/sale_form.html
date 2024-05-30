@@ -1,0 +1,17 @@
+<!-- templates/chemistApi/sale_form.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Sale</title>
+</head>
+<body>
+    <h1>Create Sale</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'sale_list' %}">Back to Sales List</a>
+</body>
+</html>

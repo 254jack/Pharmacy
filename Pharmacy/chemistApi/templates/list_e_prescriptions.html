@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}E-Prescriptions{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>All E-Prescriptions</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Prescription</th>
+                <th>Doctor Email</th>
+                <th>Signature</th>
+                <th>Issued Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e_prescription in e_prescriptions %}
+            <tr>
+                <td>{{ e_prescription.prescription }}</td>
+                <td>{{ e_prescription.doctor_email }}</td>
+                <td>{{ e_prescription.signature }}</td>
+                <td>{{ e_prescription.issued_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+	<button>
+    <a class="nav-link" href="{% url 'create_e_prescription' %}">Add E-Prescription</a>
+  </button>
+</div>
+{% endblock %}

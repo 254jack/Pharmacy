@@ -20,6 +20,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href=" {%url 'medicine_list'%}">Medicines</a>
                 </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href=" {%url 'list_prescriptions'%}">Prescriptions</a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href=" {%url 'list_e_prescriptions'%}">E-Prescriptions</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href=" {%url 'batch_list'%}">Batches</a>
                 </li>
@@ -28,7 +34,7 @@
                    
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">Sales</a>
+                    <a class="nav-link" href="{% url 'sale_list'%}">Sales</a>
                    
                 </li>
                 <li class="nav-item">

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Prescriptions{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>All Prescriptions</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Medicine</th>
+                <th>Dosage</th>
+                <th>Prescribed Date</th>
+                <th>Verified</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prescription in prescriptions %}
+            <tr>
+                <td>{{ prescription.customer.name }}</td>
+                <td>{{ prescription.medicine.name }}</td>
+                <td>{{ prescription.dosage }}</td>
+                <td>{{ prescription.prescribed_date }}</td>
+                <td>{{ prescription.verified }}</td>
+                <td>
+                    <a href="{% url 'verify_prescription' prescription.pk %}" class="btn btn-warning">Verify</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+	<button>
+    <a class="nav-link" href="{% url 'create_prescription' %}">Add Prescription</a>
+  </button>
+</div>
+{% endblock %}
