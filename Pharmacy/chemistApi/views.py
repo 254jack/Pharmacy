@@ -60,7 +60,6 @@ def add_medicine(request):
                     request, f'Medicine with the name "{medicine_name}" already exists.')
             else:
                 form.save()
-                messages.success(request, 'Medicine added successfully.')
                 return redirect('medicine_list')
     else:
         form = MedicineForm()
@@ -184,4 +183,38 @@ class OrderDeleteView(DeleteView):
     model = Order
     template_name = 'delete_order.html'
     success_url = reverse_lazy('order_list')
+
+
+def supplier_list(request):
+    suppliers = Supplier.objects.all()
+    return render(request, 'supplier_list.html', {'suppliers': suppliers})
+
+def add_supplier(request):
+    if request.method == 'POST':
+        form = SupplierForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('supplier_list')
+    else:
+        form = SupplierForm()
+    return render(request, 'add_supplier.html', {'form': form})
+
+def edit_supplier(request, pk):
+    supplier = Supplier.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = SupplierForm(request.POST, instance=supplier)
+        if form.is_valid():
+            form.save()
+            return redirect('supplier_list')
+    else:
+        form = SupplierForm(instance=supplier)
+    return render(request, 'update_supplier.html', {'form': form})
+
+def delete_supplier(request, pk):
+    supplier = Supplier.objects.get(pk=pk)
+    if request.method == 'POST':
+        supplier.delete()
+        return redirect('supplier_list')
+    return render(request, 'delete_supplier.html', {'supplier': supplier})
+
 

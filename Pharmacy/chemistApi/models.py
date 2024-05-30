@@ -21,21 +21,18 @@ class User(AbstractUser):
                                               verbose_name='user permissions',
                                               )
 
-
+class Supplier(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(default='e.g supplier@gmail.com')
+    phone_number = models.CharField(max_length=20, default='e.g 1234567890')
+    def __str__(self):
+        return self.name
 class Medicine(models.Model):
     name = models.CharField(max_length=255)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     description = models.TextField(default='No description provided')
     def __str__(self):
         return self.name
-
-
-class Supplier(models.Model):
-    name = models.CharField(max_length=100)
-    contact = models.TextField()
-
-    def __str__(self):
-        return self.name
-
 
 class Prescription(models.Model):
     customer_name = models.CharField(max_length=100)
@@ -47,16 +44,18 @@ class Prescription(models.Model):
         return f"{self.customer_name} - {self.medicine.name}"
 
 
+
 class Batch(models.Model):
     medicine = models.ForeignKey(
         Medicine, on_delete=models.CASCADE, related_name='batches')
-    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    supplier = models.ForeignKey(Supplier, default='supplier name', on_delete=models.CASCADE)
+    
     batch_no = models.CharField(max_length=100)
     expiry_date = models.DateField()
     quantity = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.medicine.name} - {self.batch_no}"
+        return f"{self.medicine.name} - {self.supplier.name}"
 
 
 class Customer(models.Model):

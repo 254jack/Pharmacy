@@ -1,0 +1,36 @@
+<!-- templates/suppliers.html -->
+{% extends 'base.html' %}
+
+{% block title %}Suppliers{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>All Suppliers</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for supplier in suppliers %}
+            <tr>
+                <td>{{ supplier.name }}</td>
+                <td>{{ supplier.email }}</td>
+                <td>{{ supplier.phone_number }}</td>
+                <td>
+                    <a href="{% url 'update_supplier' supplier.pk %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'delete_supplier' supplier.pk %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button class="btn btn-primary">
+        <a href="{% url 'add_supplier' %}" class="nav-link text-white">Add Supplier</a>
+    </button>
+</div>
+{% endblock %}

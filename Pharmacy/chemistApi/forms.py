@@ -12,11 +12,11 @@ class UserRegisterForm(UserCreationForm):
 class MedicineForm(forms.ModelForm):
     class Meta:
         model = Medicine
-        fields = ['name','description']
+        fields = ['name','supplier','description']
 class BatchForm(forms.ModelForm):
     class Meta:
         model = Batch
-        fields = ['medicine','batch_no', 'expiry_date', 'quantity','supplier']
+        fields = ['medicine','supplier','batch_no', 'expiry_date', 'quantity']
 
 
 
@@ -32,3 +32,7 @@ class OrderForm(forms.ModelForm):
         exclude = ['order_date']
 
 
+class SupplierForm(forms.ModelForm):
+    class Meta:
+        model = Supplier
+        fields = ['name', 'email', 'phone_number']

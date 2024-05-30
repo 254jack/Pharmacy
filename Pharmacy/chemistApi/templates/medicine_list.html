@@ -8,6 +8,7 @@
         <th>Name</th>
         <th>Description</th>
         <th>Batch No</th>
+        <th>Supplier</th>
         <th>Expiry Date</th>
         <th>Quantity</th>
         <th>Actions</th>
@@ -23,6 +24,9 @@
             {{ batch.batch_no }}{% if not forloop.last %}, {% endif %}
           {% endfor %}
         </td>
+		<td>
+			{{medicine.supplier.name}}
+		</td>
         <td>
           {% for batch in medicine.batches.all %}
             {{ batch.expiry_date }}{% if not forloop.last %}, {% endif %}
