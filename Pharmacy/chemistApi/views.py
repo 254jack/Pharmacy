@@ -12,13 +12,6 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from .forms import *
 
-
-@login_required
-def index(request):
-    medicines = Medicine.objects.all()
-    return render(request, 'index.html', {'medicines': medicines})
-
-
 @method_decorator(login_required, name='dispatch')
 class MedicineListView(ListView):
     model = Medicine
@@ -277,7 +270,17 @@ def delete_e_prescription(request, pk):
 
 def sale_list(request):
     sales = Sale.objects.all()
-    return render(request, 'sale_list.html', {'sales': sales})
+    return render(request, 'sale_list.html', {'sales': sales})#
+from django.contrib.auth.mixins import UserPassesTestMixin
+class SaleDeleteView(UserPassesTestMixin, DeleteView):
+    model = Sale
+    template_name = 'sale_confirm_delete.html'
+    success_url = reverse_lazy('sale_list')
+    
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
 
 def sale_create(request):
     if request.method == 'POST':

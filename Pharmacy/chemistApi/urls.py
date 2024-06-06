@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='index.html'), name='index'),
+    path('', views.sale_create, name='sales_create'),
     path('add_medicine/', views.add_medicine, name='add_medicine'),
     path('signup/', views.SignUpView.as_view(), name='signup'),
     path('login/', views.CustomLoginView.as_view(), name='login'),
@@ -62,17 +62,22 @@ urlpatterns = [
 
 
     path('prescriptions/', views.list_prescriptions, name='list_prescriptions'),
-    path('prescriptions/create/', views.create_prescription, name='create_prescription'),
+    path('prescriptions/create/', views.create_prescription,
+         name='create_prescription'),
     path('prescriptions/verify/<int:pk>/',
          views.verify_prescription, name='verify_prescription'),
-    path('prescriptions/delete/<int:pk>/', views.delete_prescription, name='delete_prescription'),
+    path('prescriptions/delete/<int:pk>/',
+         views.delete_prescription, name='delete_prescription'),
 
-    path('e-prescriptions/', views.list_e_prescriptions, name='list_e_prescriptions'),
+    path('e-prescriptions/', views.list_e_prescriptions,
+         name='list_e_prescriptions'),
     path('e-prescriptions/create/', views.create_e_prescription,
          name='create_e_prescription'),
-     path('e-prescriptions/delete/<int:pk>/', views.delete_e_prescription, name='delete_e_prescription'),
-     
-     path('sales/', views.sale_list, name='sale_list'),
-     path('sales/new/', views.sale_create, name='sale_create'),
-    
+    path('e-prescriptions/delete/<int:pk>/',
+         views.delete_e_prescription, name='delete_e_prescription'),
+
+    path('sales/', views.sale_list, name='sale_list'),
+    path('sales/new/', views.sale_create, name='sale_create'),
+    path('sales/delete/<int:pk>/',
+         views.SaleDeleteView.as_view(), name='sale_delete'),
 ]

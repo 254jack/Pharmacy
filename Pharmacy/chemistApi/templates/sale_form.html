@@ -1,17 +1,23 @@
-<!-- templates/chemistApi/sale_form.html -->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create Sale</title>
-</head>
-<body>
-    <h1>Create Sale</h1>
+{% block content %}
+<div class="jumbotron">
+  <h1>Welcome to the Pharmacy Management System</h1>
+  
+  {% if user.is_authenticated %}
+    <h3>Create Sale</h3>
     <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Save</button>
     </form>
-    <a href="{% url 'sale_list' %}">Back to Sales List</a>
-</body>
-</html>
+    <a href="{% url 'sale_list' %}">Sales List</a>
+  {% else %}
+    <p>Please log in or sign up to continue.</p>
+    <p>
+      <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Login</a>
+      <a class="btn btn-secondary btn-lg" href="{% url 'signup' %}" role="button">Sign Up</a>
+    </p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -133,4 +133,4 @@ This project is licensed under the MIT License. See the LICENSE file for details
 Contact
 For any inquiries, please contact:
 
-Taixon J (taixonj@gmail.com)
+Jackson Njoroge (taixonj@gmail.com)

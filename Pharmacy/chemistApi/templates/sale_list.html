@@ -1,15 +1,51 @@
-{% extends 'base.html' %}
-
-{% block title %}Prescriptions{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
 <div class="container">
-    <h1>Sales List</h1>
-    <a href="{% url 'sale_create' %}">Create New Sale</a>
-    <ul>
-        {% for sale in sales %}
-            <li>{{ sale.customer.name }} bought {{ sale.quantity }} of {{ sale.medicine.name }} on {{ sale.sale_date }}</li>
-        {% endfor %}
-    </ul>
-</div>
-{%endblock%}
+  <h1>Sales List</h1>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Medicine</th>
+        <th>Customer</th>
+        <th>Quantity</th>
+        <th>Sale Date</th>
+        <th>Total Price </th>
+        {% if user.is_superuser%}
+        <th>Actions</th>
+        {%endif%}
+      </tr>
+    </thead>
+    <tbody>
+      {% for sale in sales %}
+      <tr>
+        <td>{{ sale.medicine.name }}</td>
+        <td>{{ sale.customer.name }}</td>
+        <td>{{ sale.quantity }}</td>
+        <td>{{ sale.sale_date }}</td>
+        <td>Ksh {{ sale.total_price }}</td>
+        <td>
+          {% if user.is_superuser %}
+          <a href="{% url 'sale_delete' sale.pk %}">Delete</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+       <tr>
+      <td colspan="4" style="text-align: right;">Total:</td>
+      <td>{% with sales_total=0 %}
+  {% for sale in sales %}
+    {% with sale_price=sale.total_price %}
+      {% with sales_total=sales_total|add:sale_price %}
+      {% endwith %}
+    {% endwith %}
+  {% endfor %}
+  Ksh {{ sales_total }}
+{% endwith %}
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+{% endblock %}

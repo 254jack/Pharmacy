@@ -11,6 +11,7 @@
         <th>Supplier</th>
         <th>Expiry Date</th>
         <th>Quantity</th>
+        <th>Price</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -37,6 +38,7 @@
             {{ batch.quantity }}{% if not forloop.last %}, {% endif %}
           {% endfor %}
         </td>
+        <td>{{medicine.price}}</td>
         <td>
           <a href="{% url 'medicine_update' medicine.pk %}" class="btn btn-warning">Edit</a>
           <a href="{% url 'medicine_delete' medicine.pk %}" class="btn btn-danger">Delete</a>

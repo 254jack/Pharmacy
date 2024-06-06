@@ -16,7 +16,7 @@ class UserRegisterForm(UserCreationForm):
 class MedicineForm(forms.ModelForm):
     class Meta:
         model = Medicine
-        fields = ['name', 'supplier', 'description']
+        fields = ['name', 'supplier', 'description','price']
 
 
 class BatchForm(forms.ModelForm):

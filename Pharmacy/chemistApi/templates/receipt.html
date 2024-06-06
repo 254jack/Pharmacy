@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Receipt{% endblock %}
+
+{% block content %}
+<div class="receipt-container">
+    <div class="receipt-header">
+        <h1>Receipt</h1>
+        <p>Date: {{ sale.sale_date }}</p>
+    </div>
+    <div class="receipt-details">
+        <p>Customer: {{ sale.customer.name if sale.customer else 'Walk-in Customer' }}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Medicine</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ sale.medicine.name }}</td>
+                    <td>{{ sale.quantity }}</td>
+                    <td>${{ sale.medicine.price }}</td>
+                    <td>${{ sale.total_price }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="receipt-footer">
+        <p>Thank you for your purchase!</p>
+    </div>
+</div>
+{% endblock %}
